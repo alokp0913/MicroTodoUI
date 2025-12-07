@@ -1,1 +1,32 @@
+name: Dokcer image build for UI
+on:
+  workflow_dispatch:
 
+env:
+  ACR_NAME: mytodo0913acr0001
+  IMAGE_NAME: ui_micro
+  tag: 1.20
+  ACR_SERVER: mytodo0913acr0001.azurecr.io
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  image_build_push:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: checkout 
+        uses: actions/checkout@v6.0.1
+      - name: Azure login
+        uses: Azure/login@v2.3.0
+        with:
+          client-id: ${{secrets.CLIENT_ID}}
+          tenant-id: ${{secrets.TENANT_ID}}
+          subscription-id: ${{secrets.SUBSCRIPTION_ID}}
+      - name: ACR login
+        run: az acr login --name $ACR_NAME
+      - name: dokcre Buiild and tag to docker Image
+        run: dokcer build -t $ACR_SERVER/$IMAGE_NAME:$tag
+       
+          
