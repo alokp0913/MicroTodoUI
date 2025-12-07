@@ -29,9 +29,12 @@ jobs:
           subscription-id: ${{secrets.SUBSCRIPTION_ID}}
       - name: ACR login
         run: az acr login --name $ACR_NAME
+      
+      - name: Set version
+        run: echo "VERSION=$(date +%Y%m%d)-${{ github.run_number }}" >> $GITHUB_ENV
       - name: docker Buiild and tag to docker Image
         run: docker build -t $ACR_SERVER/$IMAGE_NAME:$tag .
       - name: Push image to ACR
-        run: docker push $ACR_SERVER/$IMAGE_NAME:$tag
+        run: docker push $ACR_SERVER/$IMAGE_NAME:$VERSION
        
           
