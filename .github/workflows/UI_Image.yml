@@ -30,7 +30,7 @@ jobs:
       - name: ACR login
         run: az acr login --name $ACR_NAME
       - name: docker Buiild and tag to docker Image
-        run: docker build -t $ACR_SERVER/$IMAGE_NAME:$tag
+        run: docker build -t $ACR_SERVER/$IMAGE_NAME:$tag .
       - name: Push image to ACR
         run: docker push $ACR_SERVER/$IMAGE_NAME:$tag
        
