@@ -1,6 +1,9 @@
 name: Dokcer image build for UI
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   ACR_NAME: mytodo0913acr0001
@@ -26,7 +29,9 @@ jobs:
           subscription-id: ${{secrets.SUBSCRIPTION_ID}}
       - name: ACR login
         run: az acr login --name $ACR_NAME
-      - name: dokcre Buiild and tag to docker Image
-        run: dokcer build -t $ACR_SERVER/$IMAGE_NAME:$tag
+      - name: docker Buiild and tag to docker Image
+        run: docker build -t $ACR_SERVER/$IMAGE_NAME:$tag
+      - name: Push image to ACR
+        run: docker push $ACR_SERVER/$IMAGE_NAME:$tag
        
           
