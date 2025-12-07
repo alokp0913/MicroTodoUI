@@ -1,26 +1,29 @@
-# Stage 1: Build the React app
+# Download base images for node as stage 1 - Build
 FROM node:16.17.0-alpine as build
-
-# Set the working directory
+# Set Working Directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# COPY package.json files from local to container build 
+
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# RUN npm CI for doanload dependencies and clear old node_modules files
+RUN npm ci
 
-# Copy the remaining application code
 COPY . .
-
-# Build the React app
 RUN npm run build
 
-# Stage 2: Create a minimal production-ready image
-FROM nginx:alpine
 
-# Copy the built app from the 'build' stage
+# STAGE 2 server the build artifacts from stage 1 to stage 2
+
+# Download nginx Base image 
+FROM nginx:alpine as Serve
+# Delete defaul files from html folder
+RUN rm -rf /usr/share/nginx/html/*
+# Copy build artifacts from Stage-1 Build and serve onto nginx html dirrctory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose port 80
+# expose the
 EXPOSE 80
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
