@@ -33,7 +33,7 @@ jobs:
       - name: Set version
         run: echo "VERSION=$(date +%Y%m%d)-${{ github.run_number }}" >> $GITHUB_ENV
       - name: docker Buiild and tag to docker Image
-        run: docker build -t $ACR_SERVER/$IMAGE_NAME:$tag .
+        run: docker build -t $ACR_SERVER/$IMAGE_NAME:$VERSION .
       - name: Push image to ACR
         run: docker push $ACR_SERVER/$IMAGE_NAME:$VERSION
        
